@@ -8,12 +8,16 @@ class BooksController < ApplicationController
     def show
         render json: @book, status: :ok
     end
+    # def new
+    #     @book = Book.new
+    # end
     def create
+        binding.pry
         @book = Book.new(book_params)
         if @book.save
             render json: @book, status: :created
         else
-             render json: { message: @book.errors.full_messages.join(',')}, status: :unprocessable_entity
+            #  render json: { message: @book.errors.full_messages.join(',')}, status: :unprocessable_entity
         end
     end
 
