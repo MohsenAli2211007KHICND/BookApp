@@ -1,5 +1,5 @@
 class BooksController < ApplicationController
-    before_action :set_book, only: %i[ show edit destroy ]
+    before_action :set_book, only: %i[ show edit destroy update ]
     
     def index
         @books = Book.all
@@ -8,27 +8,32 @@ class BooksController < ApplicationController
     def show
         render json: @book, status: :ok
     end
-    # def new
-    #     @book = Book.new
-    # end
     def create
-        binding.pry
         @book = Book.new(book_params)
         if @book.save
             render json: @book, status: :created
         else
-            #  render json: { message: @book.errors.full_messages.join(',')}, status: :unprocessable_entity
+            render json: { message: @book.errors.full_messages.join(',')}, status: :unprocessable_entity
+        end
+    end
+    def update
+        if @book.update(book_params)
+            render json: @book, status: :ok
+        else
+            render json: { message: @book.errors.full_messages.join(',')}, status: :unprocessable_entity
         end
     end
 
     def destroy
-        @book.destroy
+        if @book.present?
+            @book.destroy
+        end
     end
 
     private 
 
     def book_params
-        params.permit(:title, :author, :description, :page, :publish_year, :price)
+        params.permit(:title, :author, :description, :page, :publish_year, :price, :bookImg)
     end
 
     def set_book

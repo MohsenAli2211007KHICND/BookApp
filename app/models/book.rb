@@ -5,5 +5,6 @@ class Book < ApplicationRecord
     validates :page, length: { minimum: 2}
     validates :page, length: { maximum: 500}
     validates :price, numericality: true
+    has_one_attached :bookImg
 
 end
